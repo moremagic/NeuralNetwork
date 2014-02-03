@@ -39,7 +39,7 @@ public class NeuralNetwork {
         NeuroCell rootCell = new NeuroCell();
         rootCell.addInputCell(middoleCell_1);
         rootCell.addInputCell(middoleCell_2);
-        //rootCell.addInputCell(middoleCell_3);
+        rootCell.addInputCell(middoleCell_3);
         
         double[][] datas = {
             {0, 0, 0},
@@ -56,7 +56,7 @@ public class NeuralNetwork {
                 x1.setValue(datas[i][0]);
                 x2.setValue(datas[i][1]);           
                 double ans = rootCell.firing();             
-                rootCell.learning(ans, datas[i][2], 20);
+                rootCell.learning(ans, datas[i][2], 5);
                 err += Math.pow((ans - datas[i][2]), 2);
             }
             ++cnt;
