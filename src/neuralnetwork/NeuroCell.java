@@ -64,7 +64,7 @@ public class NeuroCell implements INeuroCell{
         m_v += alfa *(-1.0)*d;
         
         for(INeuroCell cell : m_inputCellArray){
-            cell.firing();
+            cell.learning(out, teachOut, alfa);
         }
     }
     

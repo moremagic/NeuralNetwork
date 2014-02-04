@@ -15,7 +15,6 @@ public class NeuralNetwork {
     public static void main(String[] args) {
         while(!Lerning_test()){
             //nop
-            break;
         }
     }
     
@@ -35,7 +34,7 @@ public class NeuralNetwork {
         NeuroCell middoleCell_3 = new NeuroCell();
         middoleCell_3.addInputCell(x1);
         middoleCell_3.addInputCell(x2);
-
+        
         NeuroCell rootCell = new NeuroCell();
         rootCell.addInputCell(middoleCell_1);
         rootCell.addInputCell(middoleCell_2);
@@ -56,11 +55,12 @@ public class NeuralNetwork {
                 x1.setValue(datas[i][0]);
                 x2.setValue(datas[i][1]);           
                 double ans = rootCell.firing();             
-                rootCell.learning(ans, datas[i][2], 5);
+                rootCell.learning(ans, datas[i][2], 10);
                 err += Math.pow((ans - datas[i][2]), 2);
             }
             ++cnt;
             if(cnt % 100000 ==0){
+                if(err > 0.3d)break;
                 System.out.println("[" + cnt + "]" + err);
             }
         }
