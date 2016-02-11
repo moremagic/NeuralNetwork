@@ -6,6 +6,7 @@ package neuralnetwork;
 
 /**
  * データ入力用の Cell
+ * 学習を行わないセルを入力として使用します
  * @author moremagic
  */
 public class PlainNeuroCell implements INeuroCell{

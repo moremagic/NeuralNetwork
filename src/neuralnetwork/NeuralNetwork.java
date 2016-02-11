@@ -23,23 +23,17 @@ public class NeuralNetwork {
         PlainNeuroCell x1 = new PlainNeuroCell(0d);
         PlainNeuroCell x2 = new PlainNeuroCell(0d);
         
-        NeuroCell middoleCell_1 = new NeuroCell();
-        middoleCell_1.addInputCell(x1);
-        middoleCell_1.addInputCell(x2);
-        
-        NeuroCell middoleCell_2 = new NeuroCell();
-        middoleCell_2.addInputCell(x1);
-        middoleCell_2.addInputCell(x2);
-        
-        NeuroCell middoleCell_3 = new NeuroCell();
-        middoleCell_3.addInputCell(x1);
-        middoleCell_3.addInputCell(x2);
-        
         NeuroCell rootCell = new NeuroCell();
-        rootCell.addInputCell(middoleCell_1);
-        rootCell.addInputCell(middoleCell_2);
-        rootCell.addInputCell(middoleCell_3);
         
+        //中間層を 3node作る
+        for(int i = 0 ; i < 3 ; i++){
+            NeuroCell middoleCell = new NeuroCell();
+            middoleCell.addInputCell(x1);
+            middoleCell.addInputCell(x2);
+            
+            rootCell.addInputCell(middoleCell);
+        }
+                
         double[][] datas = {
             {0, 0, 0},
             {0, 1, 1},
@@ -49,22 +43,30 @@ public class NeuralNetwork {
         
         long cnt = 0L;
         double err = Double.MAX_VALUE;
-        while(err > 0.001d){
+        
+        int ALPHA = 10; //学習係数
+        double learnLimit = 0.001d; //目標値
+        
+        while(err > learnLimit){
             err = 0.0d;
             for(int i = 0 ; i < datas.length ; i++){
                 x1.setValue(datas[i][0]);
                 x2.setValue(datas[i][1]);           
                 double ans = rootCell.firing();             
-                rootCell.learning(ans, datas[i][2], 10);
+                rootCell.learning(ans, datas[i][2], ALPHA);
                 err += Math.pow((ans - datas[i][2]), 2);
             }
             ++cnt;
             if(cnt % 100000 ==0){
-                if(err > 0.3d)break;
+                //計算打ち切り
+                //計算に時間がかかりすぎるため再度計算しなおしたほうが良いと判断
+//                if(err > 0.5d){
+//                    break;
+//                }
                 System.out.println("[" + cnt + "]" + err);
             }
         }
-        ret = ( err < 0.001d );
+        ret = ( err < learnLimit );
         
         //演算終了
         if(!ret){

@@ -14,11 +14,12 @@ import java.util.Random;
  */
 public class NeuroCell implements INeuroCell{
     public static final Random _RND_ = new Random(System.currentTimeMillis());
-    private List<INeuroCell> m_inputCellArray = new ArrayList<INeuroCell>();
-    private List<Double> m_waitArray = new ArrayList<Double>();
-    double m_v = 0;
+    private List<INeuroCell> m_inputCellArray = new ArrayList<INeuroCell>(); //親となるニューロセル
+    private List<Double> m_waitArray = new ArrayList<Double>(); //ニューロセルの結合荷重
+    double m_v = 0; //閾値
     
     public NeuroCell(){
+        //インスタンス生成時に　重み係数を乱数を使って生成する
         m_v = (2d * _RND_.nextDouble() - 1d);
     }
     
@@ -53,16 +54,21 @@ public class NeuroCell implements INeuroCell{
      * 学習
      * @param out 実際の出力
      * @param teachOut 教師値
+     * @param alfa 学習係数
      */
     @Override
     public void learning(double out, double teachOut, int alfa){
         double d = ((teachOut - out) * out * (1-out));
         for(int i = 0 ; i < m_waitArray.size() ; i++){
+            //結合荷重の学習
             double cal = m_waitArray.get(i) + (alfa * m_inputCellArray.get(i).firing() * d);
             m_waitArray.set(i, cal);
         }
+        
+        // 閾値の学習
         m_v += alfa *(-1.0)*d;
         
+        //バックプロパゲーション
         for(INeuroCell cell : m_inputCellArray){
             cell.learning(out, teachOut, alfa);
         }
